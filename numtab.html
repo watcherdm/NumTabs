@@ -1,0 +1,58 @@
+<script type="text/javascript">
+var tab_events = ['onAttached', 'onCreated', 'onDetached', 'onMoved', 'onRemoved', 'Updated'],
+	i = 0,
+	event,
+	tabs_helper;
+
+for(; event = tab_events[i++];){
+	method = (event === "onMoved")?Moved:Updated;
+	chrome.tabs[event].addListener(method);
+}
+chrome.idle.queryState(3, updateTabs);
+chrome.idle.onStateChanged.addListener(updateTabs);
+function Moved(tabId, moveInfo){
+	var wid = moveInfo.windowId,
+		fid = moveInfo.fromIndex,
+		tid = moveInfo.toIndex;
+	console.log('moved tab from ' + fid + ' to ' + tid);
+	chrome.tabs.sendRequest(tabId, tid + 1, function(){});
+}
+function SelectionChanged(){
+	// this doesn't really need to do anything
+}
+
+function Removed(){
+	// need to update all tabs to reflect the new length
+}
+
+function Detached(){
+	// need to update similar to Removed
+}
+function Created(){
+	// need to update the new length and update this with its place in the list
+}
+function Attached(){
+	// update like created
+}
+function Updated(){
+	chrome.tabs.getAllInWindow(null, function(tabs){
+		if(tabs_helper !== tabs){
+			tabs_helper = tabs;
+		}
+		var i = 0,
+			tab,
+			title,
+			hotkey = 1;
+		for(;tab = tabs[i++];){
+			hotkey = '';
+			if(i <= 8){
+				hotkey = i;
+			}
+			if(i === tabs.length){
+				hotkey = 9;
+			}
+			chrome.tabs.sendRequest(tab.id, hotkey, function(){});
+		}
+	});
+}
+</script>
