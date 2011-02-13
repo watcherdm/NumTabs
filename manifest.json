@@ -1,7 +1,7 @@
 {
   "name": "NumTabs",
-  "version": "0.0",
-  "description": "Gets information from Google.",
+  "version": "0.2",
+  "description": "Adds position numbers to the titles of tabs.",
   "background_page": "numtab.html",
   "icons": {
     "32": "numtabs_32.png",

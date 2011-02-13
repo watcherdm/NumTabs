@@ -1,22 +1,5 @@
 <script type="text/javascript">
 (function(){
-	var tab_events = ['onAttached', 'onCreated', 'onDetached', 'onMoved', 'onRemoved', 'onUpdated', 'onSelectionChanged'],
-		i = 0,
-		event,
-		tabs_helper;
-
-	for(; event = tab_events[i++];){
-		var method = (event === 'onMoved')?Moved : Updated;
-		chrome.tabs[event].addListener(method);
-	}
-	chrome.idle.queryState(15, Updated);
-	chrome.idle.onStateChanged.addListener(Updated);
-	function Moved(tabId, moveInfo){
-		var fid = moveInfo.fromIndex,
-			tid = moveInfo.toIndex;
-		console.log(fid, tid)	;
-		chrome.tabs.sendRequest(tabId, tid, function(d){console.log(d)});
-	};
 	function Updated(tabId, info, tab){
 		chrome.tabs.getAllInWindow(null, function(tabs){
 			if(tabs_helper !== tabs){
@@ -38,5 +21,16 @@
 			}
 		});
 	};
+	var tab_events = ['onAttached', 'onCreated', 'onDetached', 'onMoved', 'onRemoved', 'onUpdated', 'onSelectionChanged'],
+		i = 0,
+		event,
+		tabs_helper;
+
+	for(; event = tab_events[i++];){
+		var method = Updated;
+		chrome.tabs[event].addListener(method);
+	}
+	chrome.idle.queryState(1, Updated);
+	chrome.idle.onStateChanged.addListener(Updated);
 })()
 </script>
