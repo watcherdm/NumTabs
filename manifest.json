@@ -1,6 +1,6 @@
 {
   "name": "NumTabs",
-  "version": "0.2",
+  "version": "0.4",
   "description": "Adds position numbers to the titles of tabs.",
   "background_page": "numtab.html",
   "icons": {
