@@ -7,8 +7,8 @@
 			var title = document.title;
 			if(id !== old_id){
 				var len = 0;
-				if(old_id){
-					len = old_id.toString().length
+				if(old_id && title.charAt(0) === old_id.charAt(0)){
+					len = old_id.toString().length;
 				}
 				title = id + " " + title.substr(len);
 				//console.log(title);
@@ -17,4 +17,4 @@
 			}
 		}, 100);
 	}
-})()
+})();
